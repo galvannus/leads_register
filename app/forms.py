@@ -46,3 +46,19 @@ class RegisterForm(Form):
     def validate_email(self, email):
         if User.get_by_email(email.data):
             raise validators.ValidationError('El email ya se encuentra en uso.')
+
+class LeadForm(Form):
+    title = HiddenField('Titulo', [
+        validators.DataRequired()
+    ])
+    fullname = StringField('Nombre completo', [
+        validators.DataRequired()
+    ])
+    telephone = StringField('Teléfono', [
+        validators.DataRequired()
+    ])
+    email = EmailField('Correo electronico', [
+        validators.Required(message='El email es requerido.'),
+        validators.Email(message='Ingrese un email valido.')
+    ])
+    honeypot = HiddenField('', [ length_honeypot ])

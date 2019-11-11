@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     encrypted_password = db.Column(db.String(94), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    leads = db.relationship('Lead')
 
     def verify_password(self, password):
         return check_password_hash(self.encrypted_password, password)
@@ -57,3 +58,14 @@ class User(db.Model, UserMixin):
     @classmethod
     def get_by_id(cls, id):
         return User.query.filter_by(id=id).first()
+
+class Lead(db.Model):
+    __tablename__ = 'leads'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(50))
+    fullname = db.Column(db.String(50), nullable=False)
+    telephone = db.Column(db.String(15), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, default=datetime.datetime.now())
